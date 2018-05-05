@@ -20,7 +20,7 @@ void loop()
   digitalWrite(motorPin, LOW);
   delay(1000);
 }
-//vaihtoehtoinen moottorin pyörittäjä saattaa olla hallintumpi
+//vaihtoehtoinen moottorin pyörittäjä saattaa olla hallitumpi
 
 /*
 #include <Servo.h>
