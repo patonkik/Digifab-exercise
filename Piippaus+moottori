@@ -1,0 +1,39 @@
+
+
+//HUOM!!!!!!!!!! PITÄKÄÄ MOOTTORI ROBOTIN ULKOPUOLELLA SAATTAA PYÖRIÄ KOVAA!!!
+
+
+int motorPin = 12;
+
+void setup()
+{
+  pinMode(11, OUTPUT);
+  pinMode(motorPin, OUTPUT);
+}
+
+void loop()
+{
+  tone(11, 392, 100); // play tone 55 (G4 = 392 Hz)
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(motorPin, HIGH);
+  delay(1000); 
+  digitalWrite(motorPin, LOW);
+  delay(1000);
+}
+//vaihtoehtoinen moottorin pyörittäjä saattaa olla hallintumpi
+
+/*
+#include <Servo.h>
+
+Servo servo_12;
+
+void setup()
+{
+  servo_12.attach(12);
+
+}
+
+void loop(){
+  servo_12.write(1); 
+}
+*/
