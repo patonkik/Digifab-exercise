@@ -1,5 +1,8 @@
-/*muistipeli alusta.
-  pitää saada toimimaan meidän piirillä ja poistaa levelit ym. tarpeettomat*/
+  /*
+  muistipeli alusta.
+  pitää saada toimimaan meidän piirillä ja poistaa levelit ym. tarpeettomat. win ja lose sequenssit toimii, mutta 
+  jostain syystä itse sarja ei ole alkaakseen
+  */
 
 
 
