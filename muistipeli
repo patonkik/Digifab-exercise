@@ -41,10 +41,10 @@ void loop() {
   initSequence(gameLevel);
   done = 0;
   while (!done) {
-    beep_n_spin();
     delay(PAUSEB4SEQ);
+    beep_n_spin();
     playSequence(gameLevel);
-
+    
     if (playerGuess(gameLevel)) {
       playWinSequence();
       done = 1;
@@ -73,7 +73,6 @@ void playSequence(int gameLevel) {
 }
 /*******************************************************************************************************************/
 void setLed(int theLed) {
-  // if not 0<=theLed<NLEDS (e.g. -1), turn all off
   for (int l=0; l<NLEDS; l++) {
     digitalWrite(LEDPINS[l],l==theLed);
   }
@@ -117,10 +116,17 @@ int playLoseSequence() {// Flashes the LEDs defeatedly
   }
   setLed(-1); // turn all LEDs off
 }
-
 int getSwitchStroke() {
+  while (get1stLowSwitch()<0) {
+    // wait for next press
+    delay(50);
+  }
+  return get1stLowSwitch();
+}
+
+int get1stLowSwitch() {
   for (int i=0; i<NLEDS; i++) {
-    if (!digitalRead(SWITCHPINS[i])) {
+    if (digitalRead(SWITCHPINS[i])) {
       return i;
     }
   }
