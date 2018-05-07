@@ -8,3 +8,8 @@ It includes the following files:
 - Source code for the Arduino Uno circuit
 - The Bill of Materials for the project
 - This Readme file
+
+The reports for the project are stored in Google Drive, so we have provided links here to access them:
+- Diary report: https://docs.google.com/document/d/1O5RGzFHKtEPdaIsV6PFCcRubVUHT45-Og6ERZvJMx08/edit?usp=sharing
+- Introductory report: https://docs.google.com/document/d/1czEiMWIs1GIEoo9ajx7ruvBawDhYcQw6cwD3k_GDKVw/edit?usp=sharing
+- Summary report: https://docs.google.com/document/d/19Vfl5VsGo5zwWBFI96ErdCJB0PnRMdfwJGnuuE-HRK0/edit?usp=sharing
