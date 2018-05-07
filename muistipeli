@@ -1,7 +1,7 @@
   /*
   muistipeli alusta.
   pitää saada toimimaan meidän piirillä win ja lose sequenssit toimii, mutta 
-  jostain syystä itse sarja ei ole alkaakseen
+  ei ota inputteja
   */
 
 
@@ -12,6 +12,11 @@ const int LEDPINS[NLEDS] = {7,8,9,10};
 const int SWITCHPINS[NLEDS] = {3,4,5,6};
 const int PAUSEB4SEQ = 1000; // Millis before starting the sequence.
 const int MINLEVEL = 4;
+byte buttonState[4] = {0, 0, 0, 0}; // button state holder
+byte lastButtonState[4] = {0, 0, 0, 0}; // store old button state for compare4
+byte count = 0; // cycle through button pins
+unsigned long lastDebounceTime[4]; // record last time button was pressed
+unsigned long time; // record initial time for pattern blinks
 /**************************************************************************************************/
 int gameLevel;
 int simonSez[4]; // sequence saved in this array
@@ -34,7 +39,6 @@ void loop() {
   initSequence(gameLevel);
   done = 0;
   while (!done) {
-    getSwitchStroke();
     delay(PAUSEB4SEQ);
     playSequence(gameLevel);
 
@@ -58,9 +62,9 @@ void initSequence(int gameLevel) {
 void playSequence(int gameLevel) {
   for (int i=0; i<gameLevel; i++) {
     setLed(simonSez[i]); // Flash the LED in the sequence
-    delay(200);
+    delay(500);
     setLed(-1); // turn all LEDs off
-    delay(200);
+    delay(500);
   }
 }
 /*******************************************************************************************************************/
@@ -102,24 +106,31 @@ int playLoseSequence() {// Flashes the LEDs defeatedly
   }
   setLed(-1); // turn all LEDs off
 }
+int getSwitchStroke(){   
+ 
+  static unsigned long timeOut = 2000, countDown;
+  countDown = millis();
 
-int getSwitchStroke() {
-  while (get1stLowSwitch()>=0) {
-    // flush everything until no switch is pressed
-    delay(50);
-  }
-  while (get1stLowSwitch()<0) {
-    // wait for next press
-    delay(50);
-  }
-  return get1stLowSwitch();
-}
+  while (millis() - countDown <= timeOut)
 
-int get1stLowSwitch() {
-  for (int i=0; i<NLEDS; i++) {
-    if (!digitalRead(SWITCHPINS[i])) {
-      return i;
+  for (count = 0; count < NLEDS; count++) // loop through all the buttons
+    {
+      buttonState[count] = digitalRead(SWITCHPINS[count]); // read button states
+
+      if (buttonState[count] != lastButtonState[count]) // check to see if the state has changed from last press
+      {
+        if (buttonState[count] == LOW)
+        {
+          lastDebounceTime[count] = millis();// record the time of the last press
+          lastButtonState[count] = buttonState[count]; // update old button state for next checking
+        }
+      }
+      if ((millis() - lastDebounceTime[count]) > 50UL)
+      {
+        if (buttonState[count] == LOW)
+        {
+          return SWITCHPINS[count];
+        }
+      }
     }
   }
-  return -1;
-}
