@@ -1,6 +1,6 @@
   /*
   muistipeli alusta.
-  pitää saada toimimaan meidän piirillä ja poistaa levelit ym. tarpeettomat. win ja lose sequenssit toimii, mutta 
+  pitää saada toimimaan meidän piirillä win ja lose sequenssit toimii, mutta 
   jostain syystä itse sarja ei ole alkaakseen
   */
 
@@ -10,25 +10,25 @@
 const int NLEDS = 4; 
 const int LEDPINS[NLEDS] = {7,8,9,10};
 const int SWITCHPINS[NLEDS] = {3,4,5,6};
-const int SEQDELAY = 200; // Millis between led flashes. Shorter is harder.
 const int PAUSEB4SEQ = 1000; // Millis before starting the sequence.
 const int MINLEVEL = 4;
-const int MAXLEVEL = 16;
+/**************************************************************************************************/
 int gameLevel;
-int simonSez[MAXLEVEL]; // sequence of 0..NLEDS-1
+int simonSez[4]; // sequence saved in this array
 
-//rng
-void setup() {
-  
+/*****************************************************************************************************/
+void setup() {	 //rng creates sequence
   randomSeed(analogRead(0));
-  gameLevel=MINLEVEL;
+  gameLevel = 4;
   for (byte l=0; l<NLEDS; l++) {
     pinMode(LEDPINS[l], OUTPUT);
+	pinMode(SWITCHPINS[l], INPUT);
   }
+  
   playLoseSequence();
   playWinSequence(); 
 }
-
+/****************************************************************************************************/
 void loop() {
   int done;
   initSequence(gameLevel);
@@ -37,41 +37,40 @@ void loop() {
     getSwitchStroke();
     delay(PAUSEB4SEQ);
     playSequence(gameLevel);
+
     if (playerGuess(gameLevel)) {
       playWinSequence();
       done = 1;
-      if (gameLevel<MAXLEVEL) {
-        gameLevel++;
       }
-    } 
+    
     else {
       playLoseSequence();
     }
   }
 }
-
+/***************************************************************************************************************/
 void initSequence(int gameLevel) {
   for (int i=0; i<gameLevel; i++) {
     simonSez[i] = random(NLEDS);
   }
 }
-
+/*******************************************************************************************************************/
 void playSequence(int gameLevel) {
   for (int i=0; i<gameLevel; i++) {
     setLed(simonSez[i]); // Flash the LED in the sequence
-    delay(SEQDELAY);
+    delay(200);
     setLed(-1); // turn all LEDs off
-    delay(SEQDELAY);
+    delay(200);
   }
 }
-
+/*******************************************************************************************************************/
 void setLed(int theLed) {
   // if not 0<=theLed<NLEDS (e.g. -1), turn all off
   for (int l=0; l<NLEDS; l++) {
     digitalWrite(LEDPINS[l],l==theLed);
   }
 }
-
+/**********************************************************************************************************/
 int playerGuess(int gameLevel) {
   for (int i=0 ; i<gameLevel ; i++) {
     int guess=getSwitchStroke();
@@ -85,16 +84,16 @@ int playerGuess(int gameLevel) {
   }
   return 1;
 }
-
-int playWinSequence() {
+/**********************************************************************************************************************/
+int playWinSequence() { // Flashes the LEDs victoriously
   for (int i=0; i<4*NLEDS; i++) {
-    setLed(i%NLEDS); // Flash the LED in the sequence
+    setLed(i%NLEDS); 
     delay(50);
   }
   setLed(-1); // turn all LEDs off
 }
-
-int playLoseSequence() {
+/**************************************************************************************************************/
+int playLoseSequence() {// Flashes the LEDs defeatedly
   for (int i=0; i<16; i++) {
     for (int l=0; l<NLEDS; l++) {
       digitalWrite(LEDPINS[l],i&1);
