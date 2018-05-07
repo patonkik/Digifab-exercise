@@ -1,11 +1,4 @@
-  /*
-  ei ota inputteja 
-  */
-
-
-
-
-const int NLEDS = 4; 
+ const int NLEDS = 4; 
 const int LEDPINS[NLEDS] = {7,8,9,10};
 const int SWITCHPINS[NLEDS] = {3,4,5,6};
 const int PAUSEB4SEQ = 1000; // Millis before starting the sequence.
@@ -31,7 +24,6 @@ void setup() {
   }
  
   playLoseSequence();
-  playWinSequence(); 
   }
 /****************************************************************************************************/
 void loop() {
@@ -44,7 +36,7 @@ void loop() {
     delay(PAUSEB4SEQ);
     beep_n_spin();
     playSequence(gameLevel);
-    
+    beep_n_spin();
     if (playerGuess(gameLevel)) {
       playWinSequence();
       done = 1;
@@ -66,7 +58,7 @@ void initSequence(int gameLevel) {
 void playSequence(int gameLevel) {
   for (int i=0; i<gameLevel; i++) {
     setLed(simonSez[i]); // Flash the LED in the sequence
-    delay(500);
+    delay(500);   
     setLed(-1); // turn all LEDs off
     delay(500);
   }
@@ -93,10 +85,15 @@ int playerGuess(int gameLevel) {
 }
 
 void beep_n_spin(){
-  tone(11, 392, 1000); // play tone 55 (G4 = 392 Hz)
+  tone(11, 392, 1000);
+  delay(1000);
+  tone(11, 196, 1000);
   digitalWrite(motorPin, HIGH);
-  delay(1000); 
-  digitalWrite(motorPin, LOW);
+  delay(1000);
+  tone(11, 392, 1000);
+  delay(1000);
+  tone(11, 196, 1000);
+  delay(1000);
 }
 /**********************************************************************************************************************/
 int playWinSequence() { // Flashes the LEDs victoriously
