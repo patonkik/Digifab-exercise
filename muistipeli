@@ -1,4 +1,6 @@
- const int NLEDS = 4; 
+//This thing is a mess. Please don't judge me on it
+
+const int NLEDS = 4; 
 const int LEDPINS[NLEDS] = {7,8,9,10};
 const int SWITCHPINS[NLEDS] = {3,4,5,6};
 const int PAUSEB4SEQ = 1000; // Millis before starting the sequence.
